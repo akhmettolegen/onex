@@ -8,7 +8,7 @@ import (
 // Application model
 type Application struct {
 	Config *config.Config
-	DB *gorm.DBManager
+	DB *gorm.Gorm
 }
 
 // Get - Application initializer

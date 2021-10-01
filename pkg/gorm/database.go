@@ -8,11 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
-type DBManager struct {
+type Gorm struct {
 	DB *gorm.DB
 }
 
-func Get(config *config.Config) DBManager {
+func Get(config *config.Config) Gorm {
 	connectionString := fmt.Sprintf("host=%v port=%v user=%v dbname=%v password=%v sslmode=%v TimeZone=Asia/Almaty", config.DB.Host, config.DB.Port, config.DB.User, config.DB.Name, config.DB.Pass, config.DB.Mode)
 
 	db, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true})
@@ -20,14 +20,17 @@ func Get(config *config.Config) DBManager {
 		panic(err)
 	}
 
-	return DBManager{
+	return Gorm{
 		DB: db,
 	}
 }
 
-func (g *DBManager) AutoMigrate() {
+func (g *Gorm) AutoMigrate() {
 	fmt.Println("migrating ...")
 	g.DB.AutoMigrate(
 		models.Base{},
+		models.User{},
+		models.Company{},
+		models.AccessToken{},
 	)
 }

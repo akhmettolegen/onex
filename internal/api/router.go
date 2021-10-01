@@ -20,6 +20,14 @@ func New(app application.Application) (*gin.Engine, error) {
 		})
 
 		v1.GET("/welcome", handler.Welcome)
+
+		users := v1.Group("/users")
+		{
+			users.GET("", handler.GetUsers)
+			users.GET("/:id", handler.GetUserByID)
+			users.POST("", handler.CreateUser)
+			users.DELETE("/:id", handler.DeleteUser)
+		}
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
