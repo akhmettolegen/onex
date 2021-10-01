@@ -1,0 +1,11 @@
+server:
+  host: "localhost"
+  port: 3000
+db:
+  user: "postgres"
+  pass: "pass"
+  name: "onex"
+  host: "localhost"
+  port: 5432
+  mode: "disable"
+  auto_migrate: true
