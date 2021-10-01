@@ -21,6 +21,7 @@ func New(app application.Application) (*gin.Engine, error) {
 
 		v1.GET("/welcome", handler.Welcome)
 
+		v1.POST("/sign-up", handler.SignUp)
 		users := v1.Group("/users")
 		{
 			users.GET("", handler.GetUsers)
