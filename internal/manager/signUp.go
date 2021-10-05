@@ -1,8 +1,20 @@
 package manager
 
-import "github.com/akhmettolegen/onex/pkg/models"
+import (
+	"github.com/akhmettolegen/onex/pkg/models"
+	"golang.org/x/crypto/bcrypt"
+)
 
 func (m *Manager) SignUp(signUpReq *models.SignUpRequest) (response *models.SignUpResponse, err error){
+
+	hashedPass := []byte{}
+	if signUpReq.Password != "" {
+		hashedPass, err = bcrypt.GenerateFromPassword([]byte(signUpReq.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return nil, err
+		}
+	}
+	signUpReq.Password = string(hashedPass)
 
 	createUser := models.User{
 		Name:     signUpReq.Name,
@@ -34,3 +46,4 @@ func (m *Manager) SignUp(signUpReq *models.SignUpRequest) (response *models.Sign
 
 	return
 }
+

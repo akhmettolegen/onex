@@ -30,3 +30,14 @@ type SignUpRequest struct {
 	Phone string `json:"phone" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
+
+type SignInResponse struct {
+	Token uuid.UUID `json:"token"`
+	UserID uuid.UUID `json:"userId"`
+	TTL int `json:"ttl"`
+}
+
+type SignInRequest struct {
+	Phone string `json:"phone" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}

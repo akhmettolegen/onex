@@ -25,6 +25,11 @@ func (g *Gorm) GetUserByID(userId uuid.UUID) (user models.User, err error) {
 	return
 }
 
+func (g *Gorm) GetUserByPhone(phone string) (user models.User, err error) {
+	err = g.DB.Where("phone = ?", phone).First(&user).Error
+	return
+}
+
 func (g *Gorm) CreateUser(user *models.User) error {
 	return g.DB.Create(&user).Error
 }

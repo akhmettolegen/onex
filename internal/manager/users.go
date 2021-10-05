@@ -3,6 +3,7 @@ package manager
 import (
 	"github.com/akhmettolegen/onex/pkg/models"
 	uuid "github.com/satori/go.uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func (m *Manager) GetUsers(page, size int) (response *models.UsersListResponse, err error) {
@@ -33,6 +34,15 @@ func (m *Manager) GetUserByID(userID uuid.UUID) (response *models.UserByIDRespon
 }
 
 func (m *Manager) CreateUser(body models.UserCreateRequest) (response *models.UserByIDResponse, err error) {
+	hashedPass := []byte{}
+	if body.Password != "" {
+		hashedPass, err = bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return nil, err
+		}
+	}
+	body.Password = string(hashedPass)
+
 	createUser := models.User{
 		Name:     body.Name,
 		Phone:    body.Phone,
