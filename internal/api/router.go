@@ -30,6 +30,11 @@ func New(app application.Application) (*gin.Engine, error) {
 			users.POST("", handler.CreateUser)
 			users.DELETE("/:id", handler.DeleteUser)
 		}
+
+		file := v1.Group("/file")
+		{
+			file.POST("/upload", handler.Upload)
+		}
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

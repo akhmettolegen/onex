@@ -22,6 +22,15 @@ type Config struct {
 		Mode        string `yaml:"mode"`
 		AutoMigrate bool   `yaml:"auto_migrate"`
 	} `yaml:"db"`
+	Minio struct {
+		Scheme    string `yaml:"scheme"`
+		Host      string `yaml:"host"`
+		Port      int    `yaml:"port"`
+		AccessKey string `yaml:"accessKey"`
+		SecretKey string `yaml:"secretKey"`
+		UseSSL    bool   `yaml:"useSSL"`
+		Bucket  string  `yaml:"bucket"`
+	} `yaml:"minio"`
 }
 
 // Get - Config initializer

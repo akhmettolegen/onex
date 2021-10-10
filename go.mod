@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/gin-gonic/gin v1.7.4
+	github.com/minio/minio-go/v7 v7.0.14
 	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/cobra v1.2.1
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2

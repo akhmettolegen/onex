@@ -9,3 +9,11 @@ db:
   port: 5432
   mode: "disable"
   auto_migrate: true
+minio:
+  scheme: "https"
+  host: "localhost:9000"
+  port: 9001
+  accessKey: "access_key"
+  secretKey: "secret_key"
+  useSSL: false
+  bucket: "onex"
