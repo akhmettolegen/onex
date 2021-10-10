@@ -1,8 +1,6 @@
 package application
 
 import (
-	"context"
-	"fmt"
 	"github.com/akhmettolegen/onex/pkg/config"
 	"github.com/akhmettolegen/onex/pkg/gorm"
 	minioClient "github.com/akhmettolegen/onex/pkg/minio"
@@ -23,15 +21,7 @@ func Get() (*Application, error) {
 	// Init MinIOClient
 	client, err := minioClient.Get(config)
 	if err != nil {
-		fmt.Println("minio client init err", err)
-	}
-
-	buckets, err := client.ListBuckets(context.Background())
-	if err != nil {
-		fmt.Println("list buckets error", err)
-	}
-	for _, bucket := range buckets {
-		fmt.Println(bucket)
+		return nil, err
 	}
 
 	if config.DB.AutoMigrate {

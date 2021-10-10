@@ -13,3 +13,12 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	}
 	return errors.New("invalid creative status")
 }
+
+func (o *Order) BeforeCreate(tx *gorm.DB) (err error) {
+	// channel validation
+	switch o.Status {
+	case OrderStatusReady, OrderStatusPending:
+		return nil
+	}
+	return errors.New("invalid creative status")
+}

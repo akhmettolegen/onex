@@ -35,6 +35,14 @@ func New(app application.Application) (*gin.Engine, error) {
 		{
 			file.POST("/upload", handler.Upload)
 		}
+
+		order := v1.Group("/orders")
+		{
+			order.GET("", handler.GetOrders)
+			order.POST("", handler.CreateOrder)
+			order.GET("/:id", handler.GetOrderByID)
+			order.DELETE("/:id", handler.DeleteOrder)
+		}
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

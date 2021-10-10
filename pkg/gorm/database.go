@@ -32,5 +32,6 @@ func (g *Gorm) AutoMigrate() {
 		models.User{},
 		models.Company{},
 		models.AccessToken{},
+		models.Order{},
 	)
 }
