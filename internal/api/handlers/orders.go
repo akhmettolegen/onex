@@ -11,7 +11,7 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 	var query helpers.RequestQuery
 	err := ctx.Bind(&query)
 	if err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -19,7 +19,8 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 
 	response, err := h.Manager.GetOrders(page, size)
 	if err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"message": err.Error()})
+		return
 	}
 
 	ctx.JSON(200, response)
@@ -28,12 +29,12 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 func (h *Handler) GetOrderByID(ctx *gin.Context) {
 	id, err := uuid.FromString(ctx.Param("id"))
 	if err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
 	response, err := h.Manager.GetOrderByID(id)
 	if err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -98,13 +99,13 @@ func (h *Handler) CreateOrder(ctx *gin.Context) {
 func (h *Handler) DeleteOrder(ctx *gin.Context) {
 	id, err := uuid.FromString(ctx.Param("id"))
 	if err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
 
 	err = h.Manager.DeleteOrder(id)
 	if err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
 
