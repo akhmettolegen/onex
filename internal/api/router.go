@@ -20,10 +20,12 @@ func New(app application.Application) (*gin.Engine, error) {
 		})
 
 		v1.GET("/welcome", handler.Welcome)
-
 		v1.POST("/sign-up", handler.SignUp)
 		v1.POST("/get-token", handler.GetToken)
-		users := v1.Group("/users")
+
+		base := v1.Group("", handler.CheckChannelToken)
+
+		users := base.Group("/users")
 		{
 			users.GET("", handler.GetUsers)
 			users.GET("/:id", handler.GetUserByID)
@@ -31,12 +33,12 @@ func New(app application.Application) (*gin.Engine, error) {
 			users.DELETE("/:id", handler.DeleteUser)
 		}
 
-		file := v1.Group("/file")
+		file := base.Group("/file")
 		{
 			file.POST("/upload", handler.Upload)
 		}
 
-		order := v1.Group("/orders")
+		order := base.Group("/orders")
 		{
 			order.GET("", handler.GetOrders)
 			order.POST("", handler.CreateOrder)

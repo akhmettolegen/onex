@@ -65,7 +65,7 @@ func (m *Manager) CreateOrder(body models.OrderCreateRequest, file *multipart.Fi
 	return
 }
 
-func (m *Manager) UpdateCompany(req models.OrderUpdateRequest) (response *models.OrderByIDResponse, err error) {
+func (m *Manager) UpdateOrder(req models.OrderUpdateRequest) (response *models.OrderByIDResponse, err error) {
 	order, err := m.App.DB.GetOrderByID(req.ID)
 	if err != nil {
 		return
