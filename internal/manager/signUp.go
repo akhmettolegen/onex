@@ -1,11 +1,29 @@
 package manager
 
 import (
+	"errors"
 	"github.com/akhmettolegen/onex/pkg/models"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
+	"regexp"
 )
 
+var phoneRegex = regexp.MustCompile(`^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$`)
+
 func (m *Manager) SignUp(signUpReq *models.SignUpRequest) (response *models.SignUpResponse, err error){
+
+	if !phoneRegex.MatchString(signUpReq.Phone) {
+		return nil, errors.New("invalid phone number")
+	}
+
+	// check if user exists
+	_, err = m.App.DB.GetUserByPhone(signUpReq.Phone)
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	} else if err == nil {
+		err = errors.New("user already exists")
+		return
+	}
 
 	hashedPass := []byte{}
 	if signUpReq.Password != "" {
