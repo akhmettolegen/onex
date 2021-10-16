@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/akhmettolegen/onex/internal/manager"
 	"github.com/akhmettolegen/onex/pkg/application"
+	"github.com/akhmettolegen/onex/pkg/models"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
 	"strings"
@@ -56,4 +57,31 @@ func (h *Handler) CheckChannelToken(c *gin.Context) {
 	c.Set("token", token)
 	c.Set("user_id", tokenData.UserID.String())
 	c.Next()
+}
+
+func (h *Handler) FetchMobileUserInfo(ctx *gin.Context) {
+	var userInfo models.UserInfo
+
+	userID, isOk := ctx.Get("user_id")
+	if !isOk {
+		ctx.AbortWithStatusJSON(400, gin.H{"message": errors.New("incorrect userID received").Error()})
+		return
+	}
+
+	res, err := uuid.FromString(fmt.Sprintf("%v", userID))
+	if err != nil {
+		ctx.AbortWithStatusJSON(400, gin.H{"message": errors.New("provided token is not uuid").Error()})
+		return
+	}
+
+	userInfo.UserID = res
+
+	_, isOk = ctx.Get("token")
+	if !isOk {
+		ctx.AbortWithStatusJSON(400, gin.H{"message": errors.New("incorrect token received").Error()})
+		return
+	}
+
+	ctx.Set(models.UserInfoKey, &userInfo)
+	ctx.Next()
 }

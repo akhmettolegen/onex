@@ -33,7 +33,7 @@ func (m *Manager) GetOrderByID(orderID uuid.UUID) (response *models.OrderByIDRes
 	return
 }
 
-func (m *Manager) CreateOrder(body models.OrderCreateRequest, file *multipart.FileHeader) (response *models.OrderByIDResponse, err error){
+func (m *Manager) CreateOrder(ui *models.UserInfo, body models.OrderCreateRequest, file *multipart.FileHeader) (response *models.OrderByIDResponse, err error){
 
 	uploadFile, err := m.Upload(file)
 	if err != nil {
@@ -47,6 +47,7 @@ func (m *Manager) CreateOrder(body models.OrderCreateRequest, file *multipart.Fi
 		Description: body.Description,
 		Image:       filepath,
 		Status:      models.OrderStatusPending,
+		UserID:      ui.UserID,
 	}
 
 	err = m.App.DB.CreateOrder(orderReq)

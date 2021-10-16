@@ -23,7 +23,7 @@ func New(app application.Application) (*gin.Engine, error) {
 		v1.POST("/sign-up", handler.SignUp)
 		v1.POST("/get-token", handler.GetToken)
 
-		base := v1.Group("", handler.CheckChannelToken)
+		base := v1.Group("", handler.CheckChannelToken, handler.FetchMobileUserInfo)
 
 		users := base.Group("/users")
 		{

@@ -14,6 +14,7 @@ type Order struct {
 	Description string `json:"description"`
 	Status OrderStatus `json:"status" gorm:"default:PENDING"`
 	Image string `json:"image"`
+	UserID uuid.UUID `json:"userId"`
 }
 
 type OrdersListResponse struct {

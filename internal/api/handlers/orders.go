@@ -42,7 +42,7 @@ func (h *Handler) GetOrderByID(ctx *gin.Context) {
 }
 
 func (h *Handler) CreateOrder(ctx *gin.Context) {
-
+	ui := ctx.MustGet(models.UserInfoKey).(*models.UserInfo)
 	// Parse request body
 	var orderReq models.OrderCreateRequest
 	err := ctx.Bind(&orderReq)
@@ -64,7 +64,7 @@ func (h *Handler) CreateOrder(ctx *gin.Context) {
 
 	file := form.File["file"][0]
 
-	response, err := h.Manager.CreateOrder(orderReq, file)
+	response, err := h.Manager.CreateOrder(ui, orderReq, file)
 	if err != nil {
 		ctx.JSON(400, gin.H{"message": err.Error()})
 		return
