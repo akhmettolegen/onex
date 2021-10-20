@@ -15,12 +15,15 @@ func (m *Manager) Upload(file *multipart.FileHeader) (response *models.UploadFil
 	objectName := time.Now().Format("20060102") + "_" + randomFileName + "." + fileExt
 
 	url, err := helpers.UploadToMinio(m.App.MinIOClient, m.App.Config.Minio.Bucket, objectName, file, fileExt)
+
+	filepath := "http://" + m.App.Config.Minio.Host + "/" + m.App.Config.Minio.Bucket + "/" + url
+
 	if err != nil {
 		return
 	}
 	response = &models.UploadFileResponse{
 		Data: models.File{
-			URL:            url,
+			URL:            filepath,
 			UploadedUserID: uuid.NewV4(),
 		}}
 

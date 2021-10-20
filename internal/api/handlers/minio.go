@@ -1,10 +1,8 @@
 package handlers
 
 import (
-	"github.com/akhmettolegen/onex/pkg/helpers"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"time"
 )
 
 func (h *Handler) Upload(ctx *gin.Context) {
@@ -15,15 +13,11 @@ func (h *Handler) Upload(ctx *gin.Context) {
 		return
 	}
 
-	fileExt := helpers.GetFileExt(header.Filename)
-	randomFileName := helpers.RandStringRunes(16)
-	objectName := time.Now().Format("20060102") + "_" + randomFileName + "." + fileExt
-
-	url, err := helpers.UploadToMinio(h.App.MinIOClient, h.App.Config.Minio.Bucket, objectName, header, fileExt)
+	response, err := h.Manager.Upload(header)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		ctx.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, url)
+	ctx.JSON(http.StatusOK, response)
 }

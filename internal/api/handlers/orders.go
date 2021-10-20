@@ -51,20 +51,20 @@ func (h *Handler) CreateOrder(ctx *gin.Context) {
 		return
 	}
 
-	form, err := ctx.MultipartForm()
-	if err != nil {
-		ctx.JSON(400, gin.H{"message": err.Error()})
-		return
-	}
+	//form, err := ctx.MultipartForm()
+	//if err != nil {
+	//	ctx.JSON(400, gin.H{"message": err.Error()})
+	//	return
+	//}
+	//
+	//if form == nil || form.File == nil || len(form.File) == 0 {
+	//	ctx.JSON(400, gin.H{"message": err.Error()})
+	//	return
+	//}
+	//
+	//file := form.File["file"][0]
 
-	if form == nil || form.File == nil || len(form.File) == 0 {
-		ctx.JSON(400, gin.H{"message": err.Error()})
-		return
-	}
-
-	file := form.File["file"][0]
-
-	response, err := h.Manager.CreateOrder(ui, orderReq, file)
+	response, err := h.Manager.CreateOrder(ui, orderReq)
 	if err != nil {
 		ctx.JSON(400, gin.H{"message": err.Error()})
 		return

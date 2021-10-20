@@ -32,6 +32,7 @@ type OrdersListResponse struct {
 }
 
 type OrderCreateRequest struct {
+	Image string `json:"image"`
 	Name string `form:"name" binding:"required"`
 	Description string `form:"description"`
 	NetCost int `form:"netCost"`
@@ -48,6 +49,7 @@ type OrderByIDResponse struct {
 
 type OrderUpdateRequest struct {
 	ID uuid.UUID `json:"-"`
+	Image *string `json:"image"`
 	Name *string `form:"name" binding:"required"`
 	Description *string `form:"description"`
 	NetCost *int `form:"netCost"`

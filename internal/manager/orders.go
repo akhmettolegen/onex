@@ -3,7 +3,6 @@ package manager
 import (
 	"github.com/akhmettolegen/onex/pkg/models"
 	uuid "github.com/satori/go.uuid"
-	"mime/multipart"
 )
 
 func (m *Manager) GetOrders(page, size int) (response *models.OrdersListResponse, err error) {
@@ -33,19 +32,12 @@ func (m *Manager) GetOrderByID(orderID uuid.UUID) (response *models.OrderByIDRes
 	return
 }
 
-func (m *Manager) CreateOrder(ui *models.UserInfo, body models.OrderCreateRequest, file *multipart.FileHeader) (response *models.OrderByIDResponse, err error){
-
-	uploadFile, err := m.Upload(file)
-	if err != nil {
-		return
-	}
-
-	filepath := "http://" + m.App.Config.Minio.Host + "/" + m.App.Config.Minio.Bucket + "/" + uploadFile.Data.URL
+func (m *Manager) CreateOrder(ui *models.UserInfo, body models.OrderCreateRequest) (response *models.OrderByIDResponse, err error){
 
 	orderReq := &models.Order{
 		Name:        body.Name,
 		Description: body.Description,
-		Image:       filepath,
+		Image:       body.Image,
 		Status:      models.OrderStatusPending,
 		UserID:      ui.UserID,
 		NetCost:	 body.NetCost,
