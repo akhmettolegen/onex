@@ -48,6 +48,13 @@ func (m *Manager) CreateOrder(ui *models.UserInfo, body models.OrderCreateReques
 		Image:       filepath,
 		Status:      models.OrderStatusPending,
 		UserID:      ui.UserID,
+		NetCost:	 body.NetCost,
+		Location: 	 body.Location,
+		DeliveryTime: body.DeliveryTime,
+		DeliveryCost: body.DeliveryCost,
+		Warranty:     body.Warranty,
+		Quality: 	  body.Quality,
+		TotalCost:    body.NetCost + body.DeliveryCost,
 	}
 
 	err = m.App.DB.CreateOrder(orderReq)
@@ -77,6 +84,24 @@ func (m *Manager) UpdateOrder(req models.OrderUpdateRequest) (response *models.O
 	}
 	if req.Name != nil {
 		order.Name = *req.Name
+	}
+	if req.NetCost != nil {
+		order.NetCost = *req.NetCost
+	}
+	if req.Location != nil {
+		order.Location = *req.Location
+	}
+	if req.DeliveryTime != nil {
+		order.DeliveryTime = *req.DeliveryTime
+	}
+	if req.DeliveryCost != nil {
+		order.DeliveryCost = *req.DeliveryCost
+	}
+	if req.Quality != nil {
+		order.Quality = *req.Quality
+	}
+	if req.Warranty != nil {
+		order.Warranty = *req.Warranty
 	}
 
 	err = m.App.DB.UpdateOrderByID(&order)
