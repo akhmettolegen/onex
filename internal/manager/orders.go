@@ -5,8 +5,12 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-func (m *Manager) GetOrders(page, size int) (response *models.OrdersListResponse, err error) {
-	orders, total, err := m.App.DB.GetOrders(page, size)
+func (m *Manager) GetOrders(ui *models.UserInfo, page, size int, me string) (response *models.OrdersListResponse, err error) {
+	ifMe := false
+	if me == "true" {
+		ifMe = true
+	}
+	orders, total, err := m.App.DB.GetOrders(ui, page, size, ifMe)
 	if err != nil {
 		return nil, err
 	}

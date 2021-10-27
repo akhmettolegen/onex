@@ -8,6 +8,7 @@ import (
 )
 
 func (h *Handler) GetOrders(ctx *gin.Context) {
+	ui := ctx.MustGet(models.UserInfoKey).(*models.UserInfo)
 	var query helpers.RequestQuery
 	err := ctx.Bind(&query)
 	if err != nil {
@@ -16,8 +17,9 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 	}
 
 	page, size := helpers.ParsePagination(query)
+	me := ctx.Query("me")
 
-	response, err := h.Manager.GetOrders(page, size)
+	response, err := h.Manager.GetOrders(ui, page, size, me)
 	if err != nil {
 		ctx.JSON(400, gin.H{"message": err.Error()})
 		return
@@ -50,19 +52,6 @@ func (h *Handler) CreateOrder(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
-
-	//form, err := ctx.MultipartForm()
-	//if err != nil {
-	//	ctx.JSON(400, gin.H{"message": err.Error()})
-	//	return
-	//}
-	//
-	//if form == nil || form.File == nil || len(form.File) == 0 {
-	//	ctx.JSON(400, gin.H{"message": err.Error()})
-	//	return
-	//}
-	//
-	//file := form.File["file"][0]
 
 	response, err := h.Manager.CreateOrder(ui, orderReq)
 	if err != nil {

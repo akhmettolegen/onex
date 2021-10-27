@@ -5,10 +5,17 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-func (g *Gorm) GetOrders(page, size int)(orders []models.Order, total int, err error) {
+func (g *Gorm) GetOrders(ui *models.UserInfo, page, size int, me bool) (orders []models.Order, total int, err error) {
 	result := g.DB.
-		Order("created_at").
+		Order("created_at")
+
+	if me {
+		result = result.Where("user_id = ?", ui.UserID)
+	}
+
+	result = result.
 		Find(&orders)
+
 	if result.Error != nil {
 		err = result.Error
 		return
