@@ -25,7 +25,6 @@ ENV TZ=Asia/Almaty
 
 WORKDIR /usr/bin
 # COPY --from=build /go/bin/app .
-COPY app .
 
 EXPOSE 3001
 
