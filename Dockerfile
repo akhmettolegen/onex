@@ -28,6 +28,4 @@ WORKDIR /usr/bin
 
 EXPOSE 3001
 
-ENTRYPOINT [""]
-
 CMD ["serve"]
