@@ -28,6 +28,6 @@ WORKDIR /usr/bin
 
 EXPOSE 3001
 
-ENTRYPOINT ["./app"]
+ENTRYPOINT [""]
 
 CMD ["serve"]
