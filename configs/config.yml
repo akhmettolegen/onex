@@ -2,18 +2,18 @@ server:
   host: "localhost"
   port: 3000
 db:
-  user: "postgres"
-  pass: "pass"
+  user: "doadmin"
+  pass: "yFgpeO9FbRLuHeFn"
   name: "onex"
-  host: "localhost"
-  port: 5432
-  mode: "disable"
+  host: "db-postgresql-sfo3-23644-do-user-10147817-0.b.db.ondigitalocean.com"
+  port: 25060
+  mode: "require"
   auto_migrate: true
 minio:
   scheme: "https"
-  host: "localhost:9000"
+  host: "143.198.96.88:9000"
   port: 9001
-  accessKey: "access_key"
-  secretKey: "secret_key"
+  accessKey: "AKIAIOSFODNN7EXAMPLE"
+  secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
   useSSL: false
   bucket: "onex"
