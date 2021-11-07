@@ -17,7 +17,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 func (o *Order) BeforeCreate(tx *gorm.DB) (err error) {
 	// channel validation
 	switch o.Status {
-	case OrderStatusReady, OrderStatusPending:
+	case OrderStatusReady, OrderStatusPending, OrderStatusRecommended:
 		return nil
 	}
 	return errors.New("invalid creative status")

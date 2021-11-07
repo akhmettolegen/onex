@@ -18,7 +18,7 @@ func (m *Manager) GetToken(signInReq *models.SignInRequest) (response *models.Si
 
 	createToken := models.AccessToken{
 		UserID:    user.ID,
-		TTL:       1000,
+		TTL:       m.App.Config.Token.TTL,
 	}
 
 	err = m.App.DB.CreateToken(&createToken)

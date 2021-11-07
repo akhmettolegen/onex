@@ -31,6 +31,9 @@ type Config struct {
 		UseSSL    bool   `yaml:"useSSL"`
 		Bucket  string  `yaml:"bucket"`
 	} `yaml:"minio"`
+	Token struct {
+		TTL int `yaml:"ttl"`
+	}
 }
 
 // Get - Config initializer

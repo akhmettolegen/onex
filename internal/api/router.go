@@ -41,8 +41,9 @@ func New(app application.Application) (*gin.Engine, error) {
 		order := base.Group("/orders")
 		{
 			order.GET("", handler.GetOrders)
-			order.POST("", handler.CreateOrder)
 			order.GET("/:id", handler.GetOrderByID)
+			order.POST("", handler.CreateOrder)
+			order.PUT("/:id", handler.UpdateOrderByID)
 			order.DELETE("/:id", handler.DeleteOrder)
 		}
 	}

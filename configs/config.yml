@@ -17,3 +17,5 @@ minio:
   secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
   useSSL: false
   bucket: "onex"
+token:
+  ttl: 600

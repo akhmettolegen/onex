@@ -5,7 +5,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-func (g *Gorm) GetOrders(ui *models.UserInfo, page, size int, me bool) (orders []models.Order, total int, err error) {
+func (g *Gorm) GetOrders(ui *models.UserInfo, page, size int, me bool, statusFilters []models.OrderStatus) (orders []models.Order, total int, err error) {
 	result := g.DB.
 		Order("created_at")
 
@@ -14,6 +14,7 @@ func (g *Gorm) GetOrders(ui *models.UserInfo, page, size int, me bool) (orders [
 	}
 
 	result = result.
+		Where("status in ?", statusFilters).
 		Find(&orders)
 
 	if result.Error != nil {
