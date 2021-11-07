@@ -1,8 +1,8 @@
 package manager
 
 import (
-	"errors"
 	"github.com/akhmettolegen/onex/pkg/models"
+	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"regexp"
@@ -13,15 +13,15 @@ var phoneRegex = regexp.MustCompile(`^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)
 func (m *Manager) SignUp(signUpReq *models.SignUpRequest) (response *models.SignUpResponse, err error){
 
 	if !phoneRegex.MatchString(signUpReq.Phone) {
-		return nil, errors.New("invalid phone number")
+		return nil, models.InvalidPhoneNumberError
 	}
 
 	// check if user exists
 	_, err = m.App.DB.GetUserByPhone(signUpReq.Phone)
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, err
+		return nil, models.UserNotFoundError
 	} else if err == nil {
-		err = errors.New("user already exists")
+		err = models.UserAlreadyExistsError
 		return
 	}
 
@@ -98,4 +98,24 @@ func (m *Manager) SignIn(signInReq *models.SignInRequest) (response *models.Sign
 	}
 
 	return
+}
+
+func (m *Manager) CheckToken(tokenReq uuid.UUID) (response *models.CheckTokenResponse, err error) {
+	accessToken, err := m.App.DB.GetAccessToken(tokenReq)
+	if err != nil && err == models.AccessTokenExpiredError {
+		return nil, err
+	} else if err != nil && err == models.AccessTokenNotFoundError {
+		return nil, models.UnauthorizedError
+	} else if err != nil {
+		return nil, err
+	}
+
+	_, err = m.App.DB.GetUserByID(accessToken.UserID)
+	if err != nil {
+		return nil, err
+	}
+	return &models.CheckTokenResponse{
+		Token:     accessToken.Token,
+		UserID:    accessToken.UserID,
+	}, nil
 }
