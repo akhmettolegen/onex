@@ -1,16 +1,34 @@
 package api
 
 import (
+	"fmt"
 	"github.com/akhmettolegen/onex/internal/api/handlers"
 	"github.com/akhmettolegen/onex/pkg/application"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"net/http"
+	"os"
 )
+
 
 // New - creates new instance of gin.Engine
 func New(app application.Application) (*gin.Engine, error) {
 	router := gin.Default()
+
+	dir, err := os.Getwd()
+	if err != nil {
+		fmt.Println("err", err)
+	}
+
+	router.LoadHTMLGlob(fmt.Sprintf("%v/internal/api/templates/*", dir))
+
+	router.GET("/index", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "about.html", gin.H{
+			"title": "Main website",
+		})
+	})
+
 	handler := handlers.Get(app)
 
 	v1 := router.Group("/v1")
@@ -27,7 +45,7 @@ func New(app application.Application) (*gin.Engine, error) {
 			auth.POST("/sign-in", handler.SignIn)
 		}
 
-		base := v1.Group("", handler.CheckChannelToken, handler.FetchMobileUserInfo)
+		base := v1.Group("")
 
 		users := base.Group("/users")
 		{

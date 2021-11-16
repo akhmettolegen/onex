@@ -10,7 +10,7 @@ func (m *Manager) GetOrders(ui *models.UserInfo, page, size int, me string, stat
 	if me == "true" {
 		ifMe = true
 	}
-	orders, total, err := m.App.DB.GetOrders(ui, page, size, ifMe, statusFilters)
+	orders, total, err := m.App.DB.GetOrders(nil, page, size, ifMe, statusFilters)
 	if err != nil {
 		return nil, err
 	}

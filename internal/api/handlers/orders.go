@@ -5,10 +5,11 @@ import (
 	"github.com/akhmettolegen/onex/pkg/models"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
+	"net/http"
 )
 
 func (h *Handler) GetOrders(ctx *gin.Context) {
-	ui := ctx.MustGet(models.UserInfoKey).(*models.UserInfo)
+	//ui := ctx.MustGet(models.UserInfoKey).(*models.UserInfo)
 	var query helpers.RequestQuery
 	err := ctx.Bind(&query)
 	if err != nil {
@@ -20,11 +21,15 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 	statusFilters := helpers.GetStatusFiltersFromQuery(ctx)
 	me := ctx.Query("me")
 
-	response, err := h.Manager.GetOrders(ui, page, size, me, statusFilters)
+	response, err := h.Manager.GetOrders(nil, page, size, me, statusFilters)
 	if err != nil {
 		ctx.JSON(500, gin.H{"message": err.Error()})
 		return
 	}
+
+	ctx.HTML(http.StatusOK, "about.html", gin.H{
+		"orders": response.Data,
+	})
 
 	ctx.JSON(200, response)
 }

@@ -10,7 +10,7 @@ func (g *Gorm) GetOrders(ui *models.UserInfo, page, size int, me bool, statusFil
 		Order("created_at")
 
 	if me {
-		result = result.Where("user_id = ?", ui.UserID)
+		result = result.Where("user_id = ?", "39b0858b-9c72-4806-a499-d43e6e663ce0")
 	}
 
 	result = result.
