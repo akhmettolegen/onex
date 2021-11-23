@@ -2,9 +2,8 @@ package config
 
 import (
 	"fmt"
-	"os"
-
 	"gopkg.in/yaml.v2"
+	"os"
 )
 
 // Config model

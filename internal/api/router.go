@@ -20,8 +20,12 @@ func New(app application.Application) (*gin.Engine, error) {
 		})
 
 		v1.GET("/welcome", handler.Welcome)
-		v1.POST("/sign-up", handler.SignUp)
-		v1.POST("/get-token", handler.GetToken)
+
+		auth := v1.Group("/auth")
+		{
+			auth.POST("/sign-up", handler.SignUp)
+			auth.POST("/get-token", handler.GetToken)
+		}
 
 		base := v1.Group("", handler.CheckChannelToken, handler.FetchMobileUserInfo)
 
@@ -41,6 +45,7 @@ func New(app application.Application) (*gin.Engine, error) {
 		order := base.Group("/orders")
 		{
 			order.GET("", handler.GetOrders)
+			//order.GET("", handler.GetOrders2)
 			order.POST("", handler.CreateOrder)
 			order.GET("/:id", handler.GetOrderByID)
 			order.DELETE("/:id", handler.DeleteOrder)

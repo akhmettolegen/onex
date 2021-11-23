@@ -28,6 +28,25 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 	ctx.JSON(200, response)
 }
 
+func (h *Handler) GetOrders2(ctx *gin.Context) {
+	var query helpers.RequestQuery
+	err := ctx.Bind(&query)
+	if err != nil {
+		ctx.JSON(400, gin.H{"message": err.Error()})
+		return
+	}
+
+	page, size := helpers.ParsePagination(query)
+
+	response, err := h.Manager.GetOrders2(page, size)
+	if err != nil {
+		ctx.JSON(400, gin.H{"message": err.Error()})
+		return
+	}
+
+	ctx.JSON(200, response)
+}
+
 func (h *Handler) GetOrderByID(ctx *gin.Context) {
 	id, err := uuid.FromString(ctx.Param("id"))
 	if err != nil {

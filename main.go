@@ -1,7 +1,18 @@
 package main
 
-import "github.com/akhmettolegen/onex/cmd"
+import (
+	"fmt"
+	"github.com/akhmettolegen/onex/internal/api"
+	"os"
+)
 
 func main() {
-	cmd.Execute()
+	//cmd.Execute()
+
+	server, err := api.NewServer()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(2)
+	}
+	server.Start()
 }
