@@ -29,6 +29,7 @@ type SignUpRequest struct {
 	Name     string `json:"name" binding:"required"`
 	Phone string `json:"phone" binding:"required"`
 	Password string `json:"password" binding:"required"`
+	Channel *Channel `json:"channel"`
 }
 
 type SignInResponse struct {

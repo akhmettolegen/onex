@@ -17,11 +17,12 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 	}
 
 	page, size := helpers.ParsePagination(query)
+	statusFilters := helpers.GetStatusFiltersFromQuery(ctx)
 	me := ctx.Query("me")
 
-	response, err := h.Manager.GetOrders(ui, page, size, me)
+	response, err := h.Manager.GetOrders(ui, page, size, me, statusFilters)
 	if err != nil {
-		ctx.JSON(400, gin.H{"message": err.Error()})
+		ctx.JSON(500, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -74,35 +75,34 @@ func (h *Handler) CreateOrder(ctx *gin.Context) {
 
 	response, err := h.Manager.CreateOrder(ui, orderReq)
 	if err != nil {
-		ctx.JSON(400, gin.H{"message": err.Error()})
+		ctx.JSON(500, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(201, response)
 }
 
-//func (h *Handler) UpdateCampaignByID(ctx *gin.Context) {
-//	orderID := uuid.UUID(ctx.Param("id"))
-//	var campaignData model.CampaignUpdate
-//	if err := ctx.BindJSON(&campaignData); err != nil {
-//		ctx.JSON(errResp.HTTPStatus, utilsModel.BaseResponse{
-//			Code:    errResp.Code,
-//			Message: errResp.ClientMessage,
-//		})
-//		return
-//	}
-//
-//	response, errResp := h.Manager.UpdateCampaign(ui, campaignID, campaignData)
-//	if errResp != nil {
-//		ctx.JSON(errResp.HTTPStatus, utilsModel.BaseResponse{
-//			Code:    errResp.Code,
-//			Message: errResp.ClientMessage,
-//		})
-//		return
-//	}
-//
-//	h.App.Logger.Trace(ui, "UpdateCampaign", "finish")
-//	ctx.JSON(response.HTTPStatus, response)
-//}
+func (h *Handler) UpdateOrderByID(ctx *gin.Context) {
+	id, err := uuid.FromString(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(400, gin.H{"message": err.Error()})
+		return
+	}
+
+	var orderData models.OrderUpdateRequest
+	if err := ctx.BindJSON(&orderData); err != nil {
+		ctx.JSON(400, gin.H{"message": err.Error()})
+		return
+	}
+
+	orderData.ID = id
+	response, err := h.Manager.UpdateOrder(orderData)
+	if err != nil {
+		ctx.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+
+	ctx.JSON(200, response)
+}
 
 func (h *Handler) DeleteOrder(ctx *gin.Context) {
 	id, err := uuid.FromString(ctx.Param("id"))
@@ -113,7 +113,7 @@ func (h *Handler) DeleteOrder(ctx *gin.Context) {
 
 	err = h.Manager.DeleteOrder(id)
 	if err != nil {
-		ctx.JSON(400, gin.H{"message": err.Error()})
+		ctx.JSON(500, gin.H{"message": err.Error()})
 		return
 	}
 

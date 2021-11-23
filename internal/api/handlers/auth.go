@@ -19,3 +19,18 @@ func (h *Handler) SignUp(ctx *gin.Context) {
 
 	ctx.JSON(200, response)
 }
+
+func (h *Handler) SignIn(ctx *gin.Context) {
+	var signInReq models.SignInRequest
+	if err := ctx.ShouldBindJSON(&signInReq); err != nil {
+		ctx.JSON(400, gin.H{"message": err.Error()})
+		return
+	}
+	response, err := h.Manager.SignIn(&signInReq)
+	if err != nil {
+		ctx.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+
+	ctx.JSON(200, response)
+}

@@ -5,12 +5,12 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-func (m *Manager) GetOrders(ui *models.UserInfo, page, size int, me string) (response *models.OrdersListResponse, err error) {
+func (m *Manager) GetOrders(ui *models.UserInfo, page, size int, me string, statusFilters []models.OrderStatus) (response *models.OrdersListResponse, err error) {
 	ifMe := false
 	if me == "true" {
 		ifMe = true
 	}
-	orders, total, err := m.App.DB.GetOrders(ui, page, size, ifMe)
+	orders, total, err := m.App.DB.GetOrders(ui, page, size, ifMe, statusFilters)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (m *Manager) CreateOrder(ui *models.UserInfo, body models.OrderCreateReques
 		Name:        body.Name,
 		Description: body.Description,
 		Image:       body.Image,
-		Status:      models.OrderStatusPending,
+		Status:      body.Status,
 		UserID:      ui.UserID,
 		NetCost:	 body.NetCost,
 		Location: 	 body.Location,
@@ -113,6 +113,9 @@ func (m *Manager) UpdateOrder(req models.OrderUpdateRequest) (response *models.O
 	}
 	if req.Warranty != nil {
 		order.Warranty = *req.Warranty
+	}
+	if req.Status != nil {
+		order.Status = *req.Status
 	}
 
 	err = m.App.DB.UpdateOrderByID(&order)

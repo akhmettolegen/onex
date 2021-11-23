@@ -6,6 +6,7 @@ type OrderStatus string
 const (
 	OrderStatusReady OrderStatus = "READY"
 	OrderStatusPending OrderStatus = "PENDING"
+	OrderStatusRecommended OrderStatus = "RECOMMENDED"
 )
 
 type Order struct {
@@ -32,15 +33,16 @@ type OrdersListResponse struct {
 }
 
 type OrderCreateRequest struct {
-	Image string `json:"image"`
-	Name string `form:"name" binding:"required"`
-	Description string `form:"description"`
-	NetCost int `form:"netCost"`
-	Location string `form:"location"`
-	DeliveryTime string `form:"deliveryTime"`
-	DeliveryCost int `form:"deliveryCost"`
-	Warranty string `form:"warranty"`
-	Quality string `form:"quality"`
+	Image string `json:"image" binding:"required"`
+	Name string `json:"name" binding:"required"`
+	Description string `json:"description"`
+	Status OrderStatus `json:"status"`
+	NetCost int `json:"netCost"`
+	Location string `json:"location"`
+	DeliveryTime string `json:"deliveryTime"`
+	DeliveryCost int `json:"deliveryCost"`
+	Warranty string `json:"warranty"`
+	Quality string `json:"quality"`
 }
 
 type OrderByIDResponse struct {
@@ -50,12 +52,13 @@ type OrderByIDResponse struct {
 type OrderUpdateRequest struct {
 	ID uuid.UUID `json:"-"`
 	Image *string `json:"image"`
-	Name *string `form:"name" binding:"required"`
-	Description *string `form:"description"`
-	NetCost *int `form:"netCost"`
-	Location *string `form:"location"`
-	DeliveryTime *string `form:"deliveryTime"`
-	DeliveryCost *int `form:"deliveryCost"`
-	Warranty *string `form:"warranty"`
-	Quality *string `form:"quality"`
+	Name *string `json:"name"`
+	Description *string `json:"description"`
+	Status *OrderStatus `json:"status"`
+	NetCost *int `json:"netCost"`
+	Location *string `json:"location"`
+	DeliveryTime *string `json:"deliveryTime"`
+	DeliveryCost *int `json:"deliveryCost"`
+	Warranty *string `json:"warranty"`
+	Quality *string `json:"quality"`
 }
