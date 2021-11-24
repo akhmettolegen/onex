@@ -24,7 +24,7 @@ func New(app application.Application) (*gin.Engine, error) {
 		auth := v1.Group("/auth")
 		{
 			auth.POST("/sign-up", handler.SignUp)
-			auth.POST("/sign-in", handler.SignIn)
+			auth.POST("/get-token", handler.SignIn)
 		}
 
 		base := v1.Group("", handler.CheckChannelToken, handler.FetchMobileUserInfo)

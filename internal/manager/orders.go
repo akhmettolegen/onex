@@ -24,6 +24,21 @@ func (m *Manager) GetOrders(ui *models.UserInfo, page, size int, me string, stat
 	return
 }
 
+func (m *Manager) GetOrders2(page, size int) (response *models.OrdersListResponse, err error) {
+	orders, total, err := m.App.DB.GetOrders2()
+	if err != nil {
+		return nil, err
+	}
+
+	response =  &models.OrdersListResponse{
+		Data:  orders,
+		Page:  page,
+		Size:  size,
+		Total: total,
+	}
+	return
+}
+
 func (m *Manager) GetOrderByID(orderID uuid.UUID) (response *models.OrderByIDResponse, err error) {
 	order, err := m.App.DB.GetOrderByID(orderID)
 	if err != nil {

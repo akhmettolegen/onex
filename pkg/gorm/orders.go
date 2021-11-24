@@ -1,6 +1,7 @@
 package gorm
 
 import (
+	"fmt"
 	"github.com/akhmettolegen/onex/pkg/models"
 	uuid "github.com/satori/go.uuid"
 )
@@ -25,6 +26,29 @@ func (g *Gorm) GetOrders(ui *models.UserInfo, page, size int, me bool, statusFil
 	offset := (page - 1) * size
 	total = len(orders)
 	err = result.Limit(size).Offset(offset).Find(&orders).Error
+	return
+}
+
+func (g *Gorm) GetOrders2() (orders []models.Order, total int, err error) {
+	db, err := g.DB.DB()
+	rows, err := db.Query("SELECT status, description FROM orders LIMIT $1", 3)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var status string
+		var description string
+		err := rows.Scan(&status, &description)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(status, description)
+	}
+	err = rows.Err()
+	if err != nil {
+		panic(err)
+	}
 	return
 }
 

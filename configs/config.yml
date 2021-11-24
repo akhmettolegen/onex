@@ -18,4 +18,4 @@ minio:
   useSSL: false
   bucket: "onex"
 token:
-  ttl: 600
+  ttl: 6000
