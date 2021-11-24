@@ -11,3 +11,8 @@ type Base struct {
 	UpdatedAt  *time.Time 	  `json:"updatedAt" gorm:"default:now()"`
 	DeletedAt  gorm.DeletedAt `json:"deletedAt" swaggertype:"string"`
 }
+
+type BaseResponse struct {
+	Code int `json:"code"`
+	Message string `json:"message"`
+}

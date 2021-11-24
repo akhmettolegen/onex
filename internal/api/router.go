@@ -37,7 +37,7 @@ func New(app application.Application) (*gin.Engine, error) {
 			users.DELETE("/:id", handler.DeleteUser)
 		}
 
-		file := base.Group("/file")
+		file := base.Group("/files")
 		{
 			file.POST("/upload", handler.Upload)
 		}

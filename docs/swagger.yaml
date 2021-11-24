@@ -1,0 +1,454 @@
+basePath: /v1
+definitions:
+  models.BaseResponse:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  models.File:
+    properties:
+      uploadedUserId:
+        type: string
+      url:
+        type: string
+    type: object
+  models.Order:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      deliveryCost:
+        type: integer
+      deliveryTime:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      image:
+        type: string
+      location:
+        type: string
+      name:
+        type: string
+      netCost:
+        type: integer
+      quality:
+        type: string
+      status:
+        type: string
+      totalCost:
+        type: integer
+      updatedAt:
+        type: string
+      userId:
+        type: string
+      warranty:
+        type: string
+    type: object
+  models.OrderByIDResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Order'
+    type: object
+  models.OrderCreateRequest:
+    properties:
+      deliveryCost:
+        type: integer
+      deliveryTime:
+        type: string
+      description:
+        type: string
+      image:
+        type: string
+      location:
+        type: string
+      name:
+        type: string
+      netCost:
+        type: integer
+      quality:
+        type: string
+      status:
+        type: string
+      warranty:
+        type: string
+    required:
+    - image
+    - name
+    type: object
+  models.OrderUpdateRequest:
+    properties:
+      deliveryCost:
+        type: integer
+      deliveryTime:
+        type: string
+      description:
+        type: string
+      image:
+        type: string
+      location:
+        type: string
+      name:
+        type: string
+      netCost:
+        type: integer
+      quality:
+        type: string
+      status:
+        type: string
+      warranty:
+        type: string
+    type: object
+  models.OrdersListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Order'
+        type: array
+      page:
+        type: integer
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  models.SignInRequest:
+    properties:
+      password:
+        type: string
+      phone:
+        type: string
+    required:
+    - password
+    - phone
+    type: object
+  models.SignInResponse:
+    properties:
+      token:
+        type: string
+      ttl:
+        type: integer
+      userId:
+        type: string
+    type: object
+  models.SignUpRequest:
+    properties:
+      channel:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+    required:
+    - name
+    - password
+    - phone
+    type: object
+  models.SignUpResponse:
+    properties:
+      token:
+        type: string
+      ttl:
+        type: integer
+      userId:
+        type: string
+    type: object
+  models.UploadFileResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.File'
+    type: object
+info:
+  contact:
+    email: support@texert.kz
+    name: API Support
+    url: https://www.texert.kz
+  description: Texert API Swagger Documentation.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Texert API Swagger
+  version: v0.0.1
+paths:
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      operationId: sign-in
+      parameters:
+      - description: SignIn Request
+        in: body
+        name: SignInRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.SignInRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SignInResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: SignIn endpoint
+      tags:
+      - OAuth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      operationId: sign-up
+      parameters:
+      - description: SignUp Request
+        in: body
+        name: SignUpRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.SignUpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SignUpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: SignUp endpoint
+      tags:
+      - OAuth
+  /files/upload:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      operationId: upload
+      parameters:
+      - description: File
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UploadFileResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Upload file to CDN
+      tags:
+      - CDN
+  /orders:
+    get:
+      consumes:
+      - application/json
+      operationId: get-orders
+      parameters:
+      - description: Get user's orders if true
+        in: query
+        name: me
+        type: string
+      - description: statuses list by commas (READY, PENDING)
+        in: query
+        name: status
+        type: string
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 15
+        description: Page size
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.OrdersListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve orders list from database
+      tags:
+      - Orders
+    post:
+      consumes:
+      - application/json
+      operationId: create-order
+      parameters:
+      - description: Order body
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.OrderCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.OrderByIDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Creates order
+      tags:
+      - Orders
+  /orders/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-order-by-id
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes specific order by id
+      tags:
+      - Orders
+    get:
+      consumes:
+      - application/json
+      operationId: get-order-by-id
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.OrderByIDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve order by id from database
+      tags:
+      - Orders
+    put:
+      consumes:
+      - application/json
+      operationId: update-order-by-id
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Order body
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.OrderUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.OrderByIDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Updates specific order by id
+      tags:
+      - Orders
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  OAuth2Password:
+    flow: password
+    tokenUrl: http://143.198.96.88:3000/oauth/sign-in
+    type: oauth2
+swagger: "2.0"
+x-extension-openapi:
+  example: value on a json format

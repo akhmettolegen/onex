@@ -5,6 +5,18 @@ import (
 	"net/http"
 )
 
+// Upload godoc
+// @Tags CDN
+// @Summary Upload file to CDN
+// @ID upload
+// @Security ApiKeyAuth
+// @Accept x-www-form-urlencoded
+// @Param file	formData file true "File"
+// @Produce json
+// @Success 200 {object} models.UploadFileResponse
+// @Failure 400 {object} models.BaseResponse
+// @Failure 500 {object} models.BaseResponse
+// @Router /files/upload [post]
 func (h *Handler) Upload(ctx *gin.Context) {
 
 	_, header, err := ctx.Request.FormFile("file")
