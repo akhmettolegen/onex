@@ -27,6 +27,19 @@ func Get(app application.Application) *Handler {
 	}
 }
 
+func (h *Handler) CORSMiddleware(ctx *gin.Context) {
+	ctx.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	ctx.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+	ctx.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, Accept, Referer, User-Agent")
+	ctx.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE, PATCH")
+
+	if ctx.Request.Method == "OPTIONS" {
+		ctx.AbortWithStatus(204)
+		return
+	}
+	ctx.Next()
+}
+
 func (h *Handler) CheckChannelToken(c *gin.Context) {
 	authHeader := c.GetHeader("Authorization")
 	if authHeader == "" {

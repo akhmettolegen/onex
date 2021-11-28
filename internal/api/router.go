@@ -13,6 +13,7 @@ func New(app application.Application) (*gin.Engine, error) {
 	router := gin.Default()
 	handler := handlers.Get(app)
 
+	router.Use(handler.CORSMiddleware)
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/ping", func(ctx *gin.Context) {
