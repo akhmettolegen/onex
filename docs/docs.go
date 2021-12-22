@@ -442,6 +442,275 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/products": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Retrieve Products list from database",
+                "operationId": "get-products",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Get user's products if true",
+                        "name": "me",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "statuses list by commas (READY, PENDING)",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 15,
+                        "description": "Page size",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ProductsListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Creates product",
+                "operationId": "create-product",
+                "parameters": [
+                    {
+                        "description": "product body",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ProductCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ProductByIDResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Retrieve product by id from database",
+                "operationId": "get-product-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ProductByIDResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Updates specific product by id",
+                "operationId": "update-product-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "product body",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ProductUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ProductByIDResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Deletes specific product by id",
+                "operationId": "delete-product-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -476,46 +745,25 @@ var doc = `{
                 "deletedAt": {
                     "type": "string"
                 },
-                "deliveryCost": {
-                    "type": "integer"
-                },
-                "deliveryTime": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "string"
                 },
-                "image": {
-                    "type": "string"
+                "product": {
+                    "$ref": "#/definitions/models.Product"
                 },
-                "location": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "netCost": {
-                    "type": "integer"
-                },
-                "quality": {
+                "productId": {
                     "type": "string"
                 },
                 "status": {
                     "type": "string"
                 },
-                "totalCost": {
-                    "type": "integer"
+                "trackCode": {
+                    "type": "string"
                 },
                 "updatedAt": {
                     "type": "string"
                 },
                 "userId": {
-                    "type": "string"
-                },
-                "warranty": {
                     "type": "string"
                 }
             }
@@ -530,39 +778,17 @@ var doc = `{
         },
         "models.OrderCreateRequest": {
             "type": "object",
-            "required": [
-                "image",
-                "name"
-            ],
             "properties": {
-                "deliveryCost": {
-                    "type": "integer"
+                "product": {
+                    "$ref": "#/definitions/models.Product"
                 },
-                "deliveryTime": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "image": {
-                    "type": "string"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "netCost": {
-                    "type": "integer"
-                },
-                "quality": {
+                "productId": {
                     "type": "string"
                 },
                 "status": {
                     "type": "string"
                 },
-                "warranty": {
+                "trackCode": {
                     "type": "string"
                 }
             }
@@ -570,34 +796,16 @@ var doc = `{
         "models.OrderUpdateRequest": {
             "type": "object",
             "properties": {
-                "deliveryCost": {
-                    "type": "integer"
+                "product": {
+                    "$ref": "#/definitions/models.Product"
                 },
-                "deliveryTime": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "image": {
-                    "type": "string"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "netCost": {
-                    "type": "integer"
-                },
-                "quality": {
+                "productId": {
                     "type": "string"
                 },
                 "status": {
                     "type": "string"
                 },
-                "warranty": {
+                "trackCode": {
                     "type": "string"
                 }
             }
@@ -609,6 +817,133 @@ var doc = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.Order"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Product": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "inStock": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "primeCost": {
+                    "type": "number"
+                },
+                "soldCount": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "totalCost": {
+                    "type": "number"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ProductByIDResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/models.Product"
+                }
+            }
+        },
+        "models.ProductCreateRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "inStock": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "primeCost": {
+                    "type": "number"
+                },
+                "soldCount": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "totalCost": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.ProductUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "inStock": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "primeCost": {
+                    "type": "number"
+                },
+                "soldCount": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "totalCost": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.ProductsListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Product"
                     }
                 },
                 "page": {

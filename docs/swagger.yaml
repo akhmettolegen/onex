@@ -20,33 +20,19 @@ definitions:
         type: string
       deletedAt:
         type: string
-      deliveryCost:
-        type: integer
-      deliveryTime:
-        type: string
-      description:
-        type: string
       id:
         type: string
-      image:
-        type: string
-      location:
-        type: string
-      name:
-        type: string
-      netCost:
-        type: integer
-      quality:
+      product:
+        $ref: '#/definitions/models.Product'
+      productId:
         type: string
       status:
         type: string
-      totalCost:
-        type: integer
+      trackCode:
+        type: string
       updatedAt:
         type: string
       userId:
-        type: string
-      warranty:
         type: string
     type: object
   models.OrderByIDResponse:
@@ -56,51 +42,24 @@ definitions:
     type: object
   models.OrderCreateRequest:
     properties:
-      deliveryCost:
-        type: integer
-      deliveryTime:
-        type: string
-      description:
-        type: string
-      image:
-        type: string
-      location:
-        type: string
-      name:
-        type: string
-      netCost:
-        type: integer
-      quality:
+      product:
+        $ref: '#/definitions/models.Product'
+      productId:
         type: string
       status:
         type: string
-      warranty:
+      trackCode:
         type: string
-    required:
-    - image
-    - name
     type: object
   models.OrderUpdateRequest:
     properties:
-      deliveryCost:
-        type: integer
-      deliveryTime:
-        type: string
-      description:
-        type: string
-      image:
-        type: string
-      location:
-        type: string
-      name:
-        type: string
-      netCost:
-        type: integer
-      quality:
+      product:
+        $ref: '#/definitions/models.Product'
+      productId:
         type: string
       status:
         type: string
-      warranty:
+      trackCode:
         type: string
     type: object
   models.OrdersListResponse:
@@ -108,6 +67,89 @@ definitions:
       data:
         items:
           $ref: '#/definitions/models.Order'
+        type: array
+      page:
+        type: integer
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  models.Product:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      image:
+        type: string
+      inStock:
+        type: boolean
+      name:
+        type: string
+      primeCost:
+        type: number
+      soldCount:
+        type: integer
+      status:
+        type: string
+      totalCost:
+        type: number
+      updatedAt:
+        type: string
+    type: object
+  models.ProductByIDResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Product'
+    type: object
+  models.ProductCreateRequest:
+    properties:
+      description:
+        type: string
+      image:
+        type: string
+      inStock:
+        type: boolean
+      name:
+        type: string
+      primeCost:
+        type: number
+      soldCount:
+        type: integer
+      status:
+        type: string
+      totalCost:
+        type: number
+    type: object
+  models.ProductUpdateRequest:
+    properties:
+      description:
+        type: string
+      image:
+        type: string
+      inStock:
+        type: boolean
+      name:
+        type: string
+      primeCost:
+        type: number
+      soldCount:
+        type: integer
+      status:
+        type: string
+      totalCost:
+        type: number
+    type: object
+  models.ProductsListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Product'
         type: array
       page:
         type: integer
@@ -440,6 +482,178 @@ paths:
       summary: Updates specific order by id
       tags:
       - Orders
+  /products:
+    get:
+      consumes:
+      - application/json
+      operationId: get-products
+      parameters:
+      - description: Get user's products if true
+        in: query
+        name: me
+        type: string
+      - description: statuses list by commas (READY, PENDING)
+        in: query
+        name: status
+        type: string
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 15
+        description: Page size
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductsListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve Products list from database
+      tags:
+      - Products
+    post:
+      consumes:
+      - application/json
+      operationId: create-product
+      parameters:
+      - description: product body
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.ProductCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductByIDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Creates product
+      tags:
+      - Products
+  /products/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-product-by-id
+      parameters:
+      - description: product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes specific product by id
+      tags:
+      - Products
+    get:
+      consumes:
+      - application/json
+      operationId: get-product-by-id
+      parameters:
+      - description: product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductByIDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve product by id from database
+      tags:
+      - Products
+    put:
+      consumes:
+      - application/json
+      operationId: update-product-by-id
+      parameters:
+      - description: product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: product body
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.ProductUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductByIDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Updates specific product by id
+      tags:
+      - Products
 securityDefinitions:
   ApiKeyAuth:
     in: header
