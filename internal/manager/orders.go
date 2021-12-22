@@ -24,28 +24,13 @@ func (m *Manager) GetOrders(ui *models.UserInfo, page, size int, me string, stat
 	return
 }
 
-func (m *Manager) GetOrders2(page, size int) (response *models.OrdersListResponse, err error) {
-	orders, total, err := m.App.DB.GetOrders2()
-	if err != nil {
-		return nil, err
-	}
-
-	response =  &models.OrdersListResponse{
-		Data:  orders,
-		Page:  page,
-		Size:  size,
-		Total: total,
-	}
-	return
-}
-
 func (m *Manager) GetOrderByID(orderID uuid.UUID) (response *models.OrderByIDResponse, err error) {
 	order, err := m.App.DB.GetOrderByID(orderID)
 	if err != nil {
 		return nil, err
 	}
 
-	response =  &models.OrderByIDResponse{
+	response = &models.OrderByIDResponse{
 		Data: order,
 	}
 	return
@@ -53,27 +38,13 @@ func (m *Manager) GetOrderByID(orderID uuid.UUID) (response *models.OrderByIDRes
 
 func (m *Manager) CreateOrder(ui *models.UserInfo, body models.OrderCreateRequest) (response *models.OrderByIDResponse, err error){
 
-	orderReq := &models.Order{
-		Name:        body.Name,
-		Description: body.Description,
-		Image:       body.Image,
-		Status:      body.Status,
-		UserID:      ui.UserID,
-		NetCost:	 body.NetCost,
-		Location: 	 body.Location,
-		DeliveryTime: body.DeliveryTime,
-		DeliveryCost: body.DeliveryCost,
-		Warranty:     body.Warranty,
-		Quality: 	  body.Quality,
-		TotalCost:    body.NetCost + body.DeliveryCost,
+	order := models.Order{
+		Status:    body.Status,
+		TrackCode: body.TrackCode,
+		UserID:    ui.UserID,
 	}
 
-	err = m.App.DB.CreateOrder(orderReq)
-	if err != nil {
-		return
-	}
-
-	order, err := m.App.DB.GetOrderByID(orderReq.ID)
+	err = m.App.DB.CreateOrder(body, &order)
 	if err != nil {
 		return
 	}
@@ -84,41 +55,35 @@ func (m *Manager) CreateOrder(ui *models.UserInfo, body models.OrderCreateReques
 	return
 }
 
-func (m *Manager) UpdateOrder(req models.OrderUpdateRequest) (response *models.OrderByIDResponse, err error) {
+func (m *Manager) UpdateOrder(req *models.OrderUpdateRequest) (response *models.OrderByIDResponse, err error) {
 	order, err := m.App.DB.GetOrderByID(req.ID)
 	if err != nil {
 		return
 	}
 
-	if req.Description != nil {
-		order.Description = *req.Description
-	}
-	if req.Name != nil {
-		order.Name = *req.Name
-	}
-	if req.NetCost != nil {
-		order.NetCost = *req.NetCost
-	}
-	if req.Location != nil {
-		order.Location = *req.Location
-	}
-	if req.DeliveryTime != nil {
-		order.DeliveryTime = *req.DeliveryTime
-	}
-	if req.DeliveryCost != nil {
-		order.DeliveryCost = *req.DeliveryCost
-	}
-	if req.Quality != nil {
-		order.Quality = *req.Quality
-	}
-	if req.Warranty != nil {
-		order.Warranty = *req.Warranty
-	}
-	if req.Status != nil {
-		order.Status = *req.Status
+	err = m.App.DB.UpdateOrderByID(req)
+	if err != nil {
+		return
 	}
 
-	err = m.App.DB.UpdateOrderByID(&order)
+	if req.Product != nil {
+		product := &order.Product
+		product.PrimeCost = req.Product.PrimeCost
+		product.TotalCost = req.Product.TotalCost
+		product.InStock = req.Product.InStock
+		product.SoldCount = req.Product.SoldCount
+		product.Status = req.Product.Status
+		product.Image = req.Product.Image
+		product.Description = req.Product.Description
+		product.Name = req.Product.Name
+
+		err = m.App.DB.UpdateProductByID(product)
+		if err != nil {
+			return
+		}
+	}
+
+	order, err = m.App.DB.GetOrderByID(order.ID)
 	if err != nil {
 		return
 	}

@@ -25,8 +25,8 @@ func ParsePagination(query RequestQuery) (int, int) {
 	return page, size
 }
 
-func GetStatusFiltersFromQuery(ctx *gin.Context) []models.OrderStatus {
-	result := []models.OrderStatus{models.OrderStatusRecommended, models.OrderStatusPending, models.OrderStatusReady}
+func GetStatusFiltersFromQueryOrder(ctx *gin.Context) []models.OrderStatus {
+	result := []models.OrderStatus{models.OrderStatusNotAnalyzed, models.OrderStatusAnalyzed}
 
 	qStatus := ctx.Query("status")
 	if len(qStatus) > 0 {
@@ -37,6 +37,24 @@ func GetStatusFiltersFromQuery(ctx *gin.Context) []models.OrderStatus {
 			trimmedStr := spaceMap(s)
 
 			result = append(result, models.OrderStatus(trimmedStr))
+		}
+	}
+
+	return result
+}
+
+func GetStatusFiltersFromQuery(ctx *gin.Context) []models.ProductStatus {
+	result := []models.ProductStatus{models.ProductStatusActive, models.ProductStatusInactive}
+
+	qStatus := ctx.Query("status")
+	if len(qStatus) > 0 {
+		result = []models.ProductStatus{}
+		separated := strings.Split(qStatus, ",")
+
+		for _, s := range separated {
+			trimmedStr := spaceMap(s)
+
+			result = append(result, models.ProductStatus(trimmedStr))
 		}
 	}
 

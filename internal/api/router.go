@@ -51,6 +51,15 @@ func New(app application.Application) (*gin.Engine, error) {
 			order.PUT("/:id", handler.UpdateOrderByID)
 			order.DELETE("/:id", handler.DeleteOrder)
 		}
+
+		product := base.Group("/products")
+		{
+			product.GET("", handler.GetProducts)
+			product.GET("/:id", handler.GetProductByID)
+			product.POST("", handler.CreateProduct)
+			product.PUT("/:id", handler.UpdateProductByID)
+			product.DELETE("/:id", handler.DeleteProduct)
+		}
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

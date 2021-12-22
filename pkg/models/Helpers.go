@@ -17,8 +17,17 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 func (o *Order) BeforeCreate(tx *gorm.DB) (err error) {
 	// order status validation
 	switch o.Status {
-	case OrderStatusReady, OrderStatusPending, OrderStatusRecommended:
+	case OrderStatusAnalyzed, OrderStatusNotAnalyzed:
 		return nil
 	}
 	return errors.New("invalid order status")
+}
+
+func (o *Product) BeforeCreate(tx *gorm.DB) (err error) {
+	// order status validation
+	switch o.Status {
+	case ProductStatusActive, ProductStatusInactive:
+		return nil
+	}
+	return errors.New("invalid product status")
 }

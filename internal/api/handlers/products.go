@@ -7,22 +7,22 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// GetOrders godoc
-// @Tags Orders
-// @Summary Retrieve orders list from database
-// @ID get-orders
+// GetProducts godoc
+// @Tags Products
+// @Summary Retrieve Products list from database
+// @ID get-products
 // @Security ApiKeyAuth
 // @Accept json
-// @Param me	query string false "Get user's orders if true"
+// @Param me	query string false "Get user's products if true"
 // @Param status	query string false "statuses list by commas (READY, PENDING)"
 // @Param page	query int false "Page number" default(1)
 // @Param size	query int false "Page size" default(15)
 // @Produce json
-// @Success 200 {object} models.OrdersListResponse
+// @Success 200 {object} models.ProductsListResponse
 // @Failure 400 {object} models.BaseResponse
 // @Failure 500 {string} models.BaseResponse
-// @Router /orders [get]
-func (h *Handler) GetOrders(ctx *gin.Context) {
+// @Router /products [get]
+func (h *Handler) GetProducts(ctx *gin.Context) {
 	ui := ctx.MustGet(models.UserInfoKey).(*models.UserInfo)
 	var query helpers.RequestQuery
 	err := ctx.Bind(&query)
@@ -34,10 +34,9 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 	}
 
 	page, size := helpers.ParsePagination(query)
-	statusFilters := helpers.GetStatusFiltersFromQueryOrder(ctx)
-	me := ctx.Query("me")
+	statusFilters := helpers.GetStatusFiltersFromQuery(ctx)
 
-	response, err := h.Manager.GetOrders(ui, page, size, me, statusFilters)
+	response, err := h.Manager.GetProducts(ui, page, size, statusFilters)
 	if err != nil {
 		ctx.JSON(500, models.BaseResponse{
 			Message: err.Error(),
@@ -48,19 +47,19 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 	ctx.JSON(200, response)
 }
 
-// GetOrderByID godoc
-// @Tags Orders
-// @Summary Retrieve order by id from database
-// @ID get-order-by-id
+// GetProductByID godoc
+// @Tags Products
+// @Summary Retrieve product by id from database
+// @ID get-product-by-id
 // @Security ApiKeyAuth
 // @Accept json
-// @Param id path string true "Order ID"
+// @Param id path string true "product ID"
 // @Produce json
-// @Success 200 {object} models.OrderByIDResponse
+// @Success 200 {object} models.ProductByIDResponse
 // @Failure 400 {object} models.BaseResponse
 // @Failure 500 {string} models.BaseResponse
-// @Router /orders/{id} [get]
-func (h *Handler) GetOrderByID(ctx *gin.Context) {
+// @Router /products/{id} [get]
+func (h *Handler) GetProductByID(ctx *gin.Context) {
 	id, err := uuid.FromString(ctx.Param("id"))
 	if err != nil {
 		ctx.JSON(400, models.BaseResponse{
@@ -68,7 +67,7 @@ func (h *Handler) GetOrderByID(ctx *gin.Context) {
 		})
 		return
 	}
-	response, err := h.Manager.GetOrderByID(id)
+	response, err := h.Manager.GetProductByID(id)
 	if err != nil {
 		ctx.JSON(400, models.BaseResponse{
 			Message: err.Error(),
@@ -79,23 +78,23 @@ func (h *Handler) GetOrderByID(ctx *gin.Context) {
 	ctx.JSON(200, response)
 }
 
-// CreateOrder godoc
-// @Tags Orders
-// @Summary Creates order
-// @ID create-order
+// CreateProduct godoc
+// @Tags Products
+// @Summary Creates product
+// @ID create-product
 // @Security ApiKeyAuth
 // @Accept json
-// @Param order body models.OrderCreateRequest true "Order body"
+// @Param product body models.ProductCreateRequest true "product body"
 // @Produce json
-// @Success 200 {object} models.OrderByIDResponse
+// @Success 200 {object} models.ProductByIDResponse
 // @Failure 400 {object} models.BaseResponse
 // @Failure 500 {string} models.BaseResponse
-// @Router /orders [post]
-func (h *Handler) CreateOrder(ctx *gin.Context) {
+// @Router /products [post]
+func (h *Handler) CreateProduct(ctx *gin.Context) {
 	ui := ctx.MustGet(models.UserInfoKey).(*models.UserInfo)
 
-	var orderReq models.OrderCreateRequest
-	err := ctx.Bind(&orderReq)
+	var productReq models.ProductCreateRequest
+	err := ctx.Bind(&productReq)
 	if err != nil {
 		ctx.JSON(400, models.BaseResponse{
 			Message: err.Error(),
@@ -103,7 +102,7 @@ func (h *Handler) CreateOrder(ctx *gin.Context) {
 		return
 	}
 
-	response, err := h.Manager.CreateOrder(ui, orderReq)
+	response, err := h.Manager.CreateProduct(ui, productReq)
 	if err != nil {
 		ctx.JSON(500, models.BaseResponse{
 			Message: err.Error(),
@@ -113,20 +112,20 @@ func (h *Handler) CreateOrder(ctx *gin.Context) {
 	ctx.JSON(201, response)
 }
 
-// UpdateOrderByID godoc
-// @Tags Orders
-// @Summary Updates specific order by id
-// @ID update-order-by-id
+// UpdateProductByID godoc
+// @Tags Products
+// @Summary Updates specific product by id
+// @ID update-product-by-id
 // @Security ApiKeyAuth
 // @Accept json
-// @Param id path string true "Order ID"
-// @Param order body models.OrderUpdateRequest true "Order body"
+// @Param id path string true "product ID"
+// @Param product body models.ProductUpdateRequest true "product body"
 // @Produce json
-// @Success 200 {object} models.OrderByIDResponse
+// @Success 200 {object} models.ProductByIDResponse
 // @Failure 400 {object} models.BaseResponse
 // @Failure 500 {string} models.BaseResponse
-// @Router /orders/{id} [put]
-func (h *Handler) UpdateOrderByID(ctx *gin.Context) {
+// @Router /products/{id} [put]
+func (h *Handler) UpdateProductByID(ctx *gin.Context) {
 	id, err := uuid.FromString(ctx.Param("id"))
 	if err != nil {
 		ctx.JSON(400, models.BaseResponse{
@@ -135,16 +134,16 @@ func (h *Handler) UpdateOrderByID(ctx *gin.Context) {
 		return
 	}
 
-	var orderData models.OrderUpdateRequest
-	if err := ctx.BindJSON(&orderData); err != nil {
+	var productData models.ProductUpdateRequest
+	if err := ctx.BindJSON(&productData); err != nil {
 		ctx.JSON(400, models.BaseResponse{
 			Message: err.Error(),
 		})
 		return
 	}
 
-	orderData.ID = id
-	response, err := h.Manager.UpdateOrder(&orderData)
+	productData.ID = id
+	response, err := h.Manager.UpdateProduct(productData)
 	if err != nil {
 		ctx.JSON(500, models.BaseResponse{
 			Message: err.Error(),
@@ -155,19 +154,19 @@ func (h *Handler) UpdateOrderByID(ctx *gin.Context) {
 	ctx.JSON(200, response)
 }
 
-// DeleteOrder godoc
-// @Tags Orders
-// @Summary Deletes specific order by id
-// @ID delete-order-by-id
+// DeleteProduct godoc
+// @Tags Products
+// @Summary Deletes specific product by id
+// @ID delete-product-by-id
 // @Security ApiKeyAuth
 // @Accept json
-// @Param id path string true "Order ID"
+// @Param id path string true "product ID"
 // @Produce json
 // @Success 200 {object} models.BaseResponse
 // @Failure 400 {object} models.BaseResponse
 // @Failure 500 {string} models.BaseResponse
-// @Router /orders/{id} [delete]
-func (h *Handler) DeleteOrder(ctx *gin.Context) {
+// @Router /products/{id} [delete]
+func (h *Handler) DeleteProduct(ctx *gin.Context) {
 	id, err := uuid.FromString(ctx.Param("id"))
 	if err != nil {
 		ctx.JSON(400, models.BaseResponse{
@@ -176,7 +175,7 @@ func (h *Handler) DeleteOrder(ctx *gin.Context) {
 		return
 	}
 
-	err = h.Manager.DeleteOrder(id)
+	err = h.Manager.DeleteProduct(id)
 	if err != nil {
 		ctx.JSON(500, models.BaseResponse{
 			Message: err.Error(),
@@ -185,6 +184,6 @@ func (h *Handler) DeleteOrder(ctx *gin.Context) {
 	}
 
 	ctx.JSON(200, models.BaseResponse{
-		Message: "order deleted",
+		Message: "product deleted",
 	})
 }

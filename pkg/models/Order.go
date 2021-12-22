@@ -4,25 +4,17 @@ import uuid "github.com/satori/go.uuid"
 
 type OrderStatus string
 const (
-	OrderStatusReady OrderStatus = "READY"
-	OrderStatusPending OrderStatus = "PENDING"
-	OrderStatusRecommended OrderStatus = "RECOMMENDED"
+	OrderStatusNotAnalyzed OrderStatus = "NOT_ANALYZED"
+	OrderStatusAnalyzed OrderStatus = "ANALYZED"
 )
 
 type Order struct {
 	Base
-	Name string `json:"name"`
-	Description string `json:"description"`
-	Status OrderStatus `json:"status" gorm:"default:PENDING"`
-	Image string `json:"image"`
+	Product Product `json:"product"`
+	ProductID uuid.UUID `json:"productId"`
+	Status OrderStatus `json:"status" gorm:"default:NOT_ANALYZED"`
+	TrackCode string `json:"trackCode"`
 	UserID uuid.UUID `json:"userId"`
-	NetCost int `json:"netCost"`
-	Location string `json:"location"`
-	DeliveryTime string `json:"deliveryTime"`
-	DeliveryCost int `json:"deliveryCost"`
-	Warranty string `json:"warranty"`
-	Quality string `json:"quality"`
-	TotalCost int `json:"totalCost"`
 }
 
 type OrdersListResponse struct {
@@ -33,16 +25,10 @@ type OrdersListResponse struct {
 }
 
 type OrderCreateRequest struct {
-	Image string `json:"image" binding:"required"`
-	Name string `json:"name" binding:"required"`
-	Description string `json:"description"`
-	Status OrderStatus `json:"status"`
-	NetCost int `json:"netCost"`
-	Location string `json:"location"`
-	DeliveryTime string `json:"deliveryTime"`
-	DeliveryCost int `json:"deliveryCost"`
-	Warranty string `json:"warranty"`
-	Quality string `json:"quality"`
+	Product Product `json:"product"`
+	ProductID uuid.UUID `json:"productId"`
+	Status OrderStatus `json:"status" gorm:"default:NOT_ANALYZED"`
+	TrackCode string `json:"trackCode"`
 }
 
 type OrderByIDResponse struct {
@@ -51,14 +37,8 @@ type OrderByIDResponse struct {
 
 type OrderUpdateRequest struct {
 	ID uuid.UUID `json:"-"`
-	Image *string `json:"image"`
-	Name *string `json:"name"`
-	Description *string `json:"description"`
-	Status *OrderStatus `json:"status"`
-	NetCost *int `json:"netCost"`
-	Location *string `json:"location"`
-	DeliveryTime *string `json:"deliveryTime"`
-	DeliveryCost *int `json:"deliveryCost"`
-	Warranty *string `json:"warranty"`
-	Quality *string `json:"quality"`
+	Product *Product `json:"product"`
+	ProductID *uuid.UUID `json:"productId"`
+	Status *OrderStatus `json:"status" gorm:"default:NOT_ANALYZED"`
+	TrackCode *string `json:"trackCode"`
 }
