@@ -8,7 +8,7 @@ import (
 
 	"net/http"
 
-	"github.com/akhmettolegen/onex/pkg/application"
+	"github.com/akhmettolegen/texert/pkg/application"
 )
 
 // Server strcut

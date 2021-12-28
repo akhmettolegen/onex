@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"github.com/akhmettolegen/onex/pkg/helpers"
-	"github.com/akhmettolegen/onex/pkg/models"
+	"github.com/akhmettolegen/texert/pkg/helpers"
+	"github.com/akhmettolegen/texert/pkg/models"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
 )

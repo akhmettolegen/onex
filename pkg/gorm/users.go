@@ -1,7 +1,7 @@
 package gorm
 
 import (
-	"github.com/akhmettolegen/onex/pkg/models"
+	"github.com/akhmettolegen/texert/pkg/models"
 	uuid "github.com/satori/go.uuid"
 )
 

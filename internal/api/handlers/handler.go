@@ -3,9 +3,9 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"github.com/akhmettolegen/onex/internal/manager"
-	"github.com/akhmettolegen/onex/pkg/application"
-	"github.com/akhmettolegen/onex/pkg/models"
+	"github.com/akhmettolegen/texert/internal/manager"
+	"github.com/akhmettolegen/texert/pkg/application"
+	"github.com/akhmettolegen/texert/pkg/models"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
 	"strings"

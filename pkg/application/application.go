@@ -1,9 +1,9 @@
 package application
 
 import (
-	"github.com/akhmettolegen/onex/pkg/config"
-	"github.com/akhmettolegen/onex/pkg/gorm"
-	minioClient "github.com/akhmettolegen/onex/pkg/minio"
+	"github.com/akhmettolegen/texert/pkg/config"
+	"github.com/akhmettolegen/texert/pkg/gorm"
+	minioClient "github.com/akhmettolegen/texert/pkg/minio"
 	"github.com/minio/minio-go/v7"
 )
 

@@ -3,12 +3,12 @@ server:
   port: 3001
 db:
   user: "doadmin"
-  pass: "yFgpeO9FbRLuHeFn"
-  name: "onex"
-  host: "db-postgresql-sfo3-23644-do-user-10147817-0.b.db.ondigitalocean.com"
+  pass: "rJS7PG5vtTvcbZhk"
+  name: "texert_db"
+  host: "db-postgresql-ams3-54442-do-user-10520545-0.b.db.ondigitalocean.com"
   port: 25060
   mode: "require"
-  auto_migrate: false
+  auto_migrate: true
 minio:
   scheme: "https"
   host: "143.198.96.88:9000"

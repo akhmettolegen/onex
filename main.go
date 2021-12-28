@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	_ "github.com/akhmettolegen/onex/docs"
-	"github.com/akhmettolegen/onex/internal/api"
+	_ "github.com/akhmettolegen/texert/docs"
+	"github.com/akhmettolegen/texert/internal/api"
 	"os"
 )
 

@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/akhmettolegen/onex/internal/api/handlers"
-	"github.com/akhmettolegen/onex/pkg/application"
+	"github.com/akhmettolegen/texert/internal/api/handlers"
+	"github.com/akhmettolegen/texert/pkg/application"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

@@ -2,7 +2,7 @@ package minioClient
 
 import (
 	"fmt"
-	"github.com/akhmettolegen/onex/pkg/config"
+	"github.com/akhmettolegen/texert/pkg/config"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 )

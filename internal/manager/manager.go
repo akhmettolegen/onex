@@ -1,6 +1,6 @@
 package manager
 
-import "github.com/akhmettolegen/onex/pkg/application"
+import "github.com/akhmettolegen/texert/pkg/application"
 
 type Manager struct {
 	App *application.Application

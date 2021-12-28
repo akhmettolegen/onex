@@ -1,8 +1,8 @@
 package manager
 
 import (
-	"github.com/akhmettolegen/onex/pkg/helpers"
-	"github.com/akhmettolegen/onex/pkg/models"
+	"github.com/akhmettolegen/texert/pkg/helpers"
+	"github.com/akhmettolegen/texert/pkg/models"
 	uuid "github.com/satori/go.uuid"
 	"mime/multipart"
 	"time"
