@@ -11,7 +11,7 @@ db:
   auto_migrate: true
 minio:
   scheme: "https"
-  host: "0.0.0.0:9000"
+  host: "164.92.217.224:9000"
   port: 9001
   accessKey: "LbBdppKYysQ6JEjj"
   secretKey: "faGwrStMQawHSbtLkdfVEDQQg4nU4MhB"
