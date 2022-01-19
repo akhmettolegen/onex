@@ -13,8 +13,8 @@ minio:
   scheme: "https"
   host: "165.232.141.124:9000"
   port: 9001
-  accessKey: "AKIAIOSFODNN7EXAMPLE"
-  secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+  accessKey: "LbBdppKYysQ6JEjj"
+  secretKey: "faGwrStMQawHSbtLkdfVEDQQg4nU4MhB"
   useSSL: false
   bucket: "texert"
 token:
