@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -18,13 +19,14 @@ import (
 // @Failure 500 {object} models.BaseResponse
 // @Router /files/upload [post]
 func (h *Handler) Upload(ctx *gin.Context) {
-
+	fmt.Println("1")
 	_, header, err := ctx.Request.FormFile("file")
 	if err != nil {
 		ctx.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
 
+	fmt.Println("2")
 	response, err := h.Manager.Upload(header)
 	if err != nil {
 		ctx.JSON(400, gin.H{"message": err.Error()})
