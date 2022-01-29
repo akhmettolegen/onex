@@ -20,6 +20,7 @@ func (m *Manager) Upload(file *multipart.FileHeader) (response *models.UploadFil
 
 	url, err := helpers.UploadToMinio(m.App.MinIOClient, m.App.Config.Minio.Bucket, objectName, file, fileExt)
 	if err != nil {
+		fmt.Println("err", err)
 		return
 	}
 	fmt.Println("7")

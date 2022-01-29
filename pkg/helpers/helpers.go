@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/minio/minio-go/v7"
 	"math/rand"
@@ -79,19 +80,25 @@ func UploadToMinio(
 	objectName string,
 	file *multipart.FileHeader,
 	contentType string) (uploadUrl string, err error) {
+	fmt.Println("6.1")
 
 	var src multipart.File
 	src, err = file.Open()
 	if err != nil {
+		fmt.Println("err", err)
 		return
 	}
+	fmt.Println("6.2")
 	defer src.Close()
+	fmt.Println("6.3")
 
 	var uploadInfo minio.UploadInfo
 	uploadInfo, err = minioClient.PutObject(context.Background(), bucketName, objectName, src, -1, minio.PutObjectOptions{ContentType: contentType})
 	if err != nil {
+		fmt.Println("err", err)
 		return
 	}
+	fmt.Println("6.4")
 
 	uploadUrl = uploadInfo.Key
 	return
