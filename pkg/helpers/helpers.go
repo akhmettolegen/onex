@@ -95,7 +95,7 @@ func UploadToMinio(
 	fmt.Println("bucketName: ", bucketName, "objectName: ", objectName, "src: ", src, "contentType: ", contentType)
 
 	var uploadInfo minio.UploadInfo
-	uploadInfo, err = minioClient.PutObject(context.Background(), bucketName, objectName, src, -1, minio.PutObjectOptions{ContentType: contentType})
+	uploadInfo, err = minioClient.PutObject(context.Background(), bucketName, objectName, src, file.Size, minio.PutObjectOptions{ContentType: contentType})
 	if err != nil {
 		fmt.Println("err", err)
 		return
