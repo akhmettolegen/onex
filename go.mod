@@ -3,7 +3,6 @@ module github.com/akhmettolegen/texert
 go 1.15
 
 require (
-	github.com/akhmettolegen/onex v0.0.0-20211222175047-d1c9f3ebb65f
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/gin-gonic/gin v1.7.4
 	github.com/minio/minio-go/v7 v7.0.14

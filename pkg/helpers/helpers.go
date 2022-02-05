@@ -90,7 +90,9 @@ func UploadToMinio(
 	}
 	fmt.Println("6.2")
 	defer src.Close()
+
 	fmt.Println("6.3")
+	fmt.Println("bucketName: ", bucketName, "objectName: ", objectName, "src: ", src, "contentType: ", contentType)
 
 	var uploadInfo minio.UploadInfo
 	uploadInfo, err = minioClient.PutObject(context.Background(), bucketName, objectName, src, -1, minio.PutObjectOptions{ContentType: contentType})

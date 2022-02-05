@@ -8,7 +8,7 @@ db:
   host: "db-postgresql-ams3-54442-do-user-10520545-0.b.db.ondigitalocean.com"
   port: 25060
   mode: "require"
-  auto_migrate: true
+  auto_migrate: false
 minio:
   scheme: "https"
   host: "164.92.217.224:9000"
