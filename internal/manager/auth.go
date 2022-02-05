@@ -6,6 +6,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"regexp"
+	"time"
 )
 
 var phoneRegex = regexp.MustCompile(`^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$`)
@@ -51,20 +52,22 @@ func (m *Manager) SignUp(signUpReq *models.SignUpRequest) (response *models.Sign
 		return
 	}
 
-	createToken := models.AccessToken{
+	token := models.AccessToken{
 		UserID:    createUser.ID,
 		TTL:       m.App.Config.Token.TTL,
 	}
 
-	err = m.App.DB.CreateToken(&createToken)
+	err = m.App.DB.CreateToken(&token)
 	if err != nil {
 		return
 	}
 
+	expireAt := token.CreatedAt.Add(time.Second * time.Duration(token.TTL))
 	response = &models.SignUpResponse{
-		Token:  createToken.Token,
-		UserID: createToken.UserID,
-		TTL:    createToken.TTL,
+		Token:  token.Token,
+		UserID: token.UserID,
+		TTL:    token.TTL,
+		ExpiresAt: expireAt,
 	}
 
 	return
@@ -81,20 +84,22 @@ func (m *Manager) SignIn(signInReq *models.SignInRequest) (response *models.Sign
 		return nil, err
 	}
 
-	createToken := models.AccessToken{
+	token := models.AccessToken{
 		UserID:    user.ID,
 		TTL:       m.App.Config.Token.TTL,
 	}
 
-	err = m.App.DB.CreateToken(&createToken)
+	err = m.App.DB.CreateToken(&token)
 	if err != nil {
 		return
 	}
 
+	expireAt := token.CreatedAt.Add(time.Second * time.Duration(token.TTL))
 	response = &models.SignInResponse{
-		Token:  createToken.Token,
-		UserID: createToken.UserID,
-		TTL:    createToken.TTL,
+		Token:  token.Token,
+		UserID: token.UserID,
+		TTL:    token.TTL,
+		ExpiresAt: expireAt,
 	}
 
 	return

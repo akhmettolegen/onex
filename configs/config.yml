@@ -18,4 +18,4 @@ minio:
   useSSL: false
   bucket: "texert"
 token:
-  ttl: 14400
+  ttl: 60

@@ -23,6 +23,7 @@ type SignUpResponse struct {
 	Token uuid.UUID `json:"token"`
 	UserID uuid.UUID `json:"userId"`
 	TTL int `json:"ttl"`
+	ExpiresAt time.Time `json:"expiresAt"`
 }
 
 type SignUpRequest struct {
@@ -36,6 +37,7 @@ type SignInResponse struct {
 	Token uuid.UUID `json:"token"`
 	UserID uuid.UUID `json:"userId"`
 	TTL int `json:"ttl"`
+	ExpiresAt time.Time `json:"expiresAt"`
 }
 
 type SignInRequest struct {
