@@ -7,6 +7,67 @@ definitions:
       message:
         type: string
     type: object
+  models.CategoriesListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Category'
+        type: array
+      page:
+        type: integer
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  models.Category:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.CategoryByIDResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Category'
+    type: object
+  models.CategoryCreateRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+      status:
+        type: string
+    required:
+    - name
+    type: object
+  models.CategoryUpdateRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+      status:
+        type: string
+    type: object
   models.File:
     properties:
       uploadedUserId:
@@ -170,6 +231,8 @@ definitions:
     type: object
   models.SignInResponse:
     properties:
+      expiresAt:
+        type: string
       token:
         type: string
       ttl:
@@ -194,6 +257,8 @@ definitions:
     type: object
   models.SignUpResponse:
     properties:
+      expiresAt:
+        type: string
       token:
         type: string
       ttl:
@@ -279,6 +344,178 @@ paths:
       summary: SignUp endpoint
       tags:
       - OAuth
+  /categories:
+    get:
+      consumes:
+      - application/json
+      operationId: get-categories
+      parameters:
+      - description: Get user's categories if true
+        in: query
+        name: me
+        type: string
+      - description: statuses list by commas (READY, PENDING)
+        in: query
+        name: status
+        type: string
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 15
+        description: Page size
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoriesListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve Categories list from database
+      tags:
+      - Categories
+    post:
+      consumes:
+      - application/json
+      operationId: create-category
+      parameters:
+      - description: category body
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.CategoryCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoryByIDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Creates category
+      tags:
+      - Categories
+  /categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-category-by-id
+      parameters:
+      - description: category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes specific category by id
+      tags:
+      - Categories
+    get:
+      consumes:
+      - application/json
+      operationId: get-category-by-id
+      parameters:
+      - description: category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoryByIDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve category by id from database
+      tags:
+      - Categories
+    put:
+      consumes:
+      - application/json
+      operationId: update-category-by-id
+      parameters:
+      - description: category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: category body
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.CategoryUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoryByIDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Updates specific category by id
+      tags:
+      - Categories
   /files/upload:
     post:
       consumes:
